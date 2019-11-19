@@ -2,35 +2,74 @@
 # CS160 FA19 Final Project - UniQueue
 
 from flask import Flask, request, jsonify, render_template
-# from flask_restful import Resource, Api
 from users import Users
-
+from question import Question
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
-# api = Api(app)
 
 users = Users()
-users.create_user_if_doesnt_exist(88, "David Xiong", "david@berkeley.edu")
-users.create_user_if_doesnt_exist(89, "Jiewen Lai", "jiewen@berkeley.edu")
-users.create_user_if_doesnt_exist(90, "Zoey Cao", "zoey@berkeley.edu")
+# users.create_user_if_doesnt_exist(88, "David Xiong", "david@berkeley.edu")
+# users.create_user_if_doesnt_exist(89, "Jiewen Lai", "jiewen@berkeley.edu")
+# users.create_user_if_doesnt_exist(90, "Zoey Cao", "zoey@berkeley.edu")
+
+question = Question()
+# question.add_question_data(queue_id=100, asker_uuid=88, question_text="David's interesting question???")
+# question.add_question_data(queue_id=100, asker_uuid=90, question_text="Zoey's intriguing question???")
+# question.add_question_data(queue_id=100, asker_uuid=88, question_text="David's second interesting question???")
+
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/users', methods=['GET'])
-def get_users():
+# =========
+#   USERS
+# =========
+
+@app.route('/users/fetchall', methods=['GET'])
+def get_all_users():
+    return jsonify(users.fetch_all_users())
+
+@app.route('/users/fetchbyuuid', methods=['GET'])
+def get_user_by_id():
     uuid = request.args.get('uuid', None)
-    email = request.args.get('email', None)
     if uuid:
         return jsonify(users.fetch_user_by_uuid(uuid))
-    # If no UUID, attempt to look for email
+    else:
+        error_message = {'error': 'Missing or malformed parameters'}
+        return jsonify(error_message)
+
+@app.route('/users/fetchbyemail', methods=['GET'])
+def get_user_by_email():
+    email = request.args.get('email', None)
     if email:
         return jsonify(users.fetch_user_by_email(email))
-    # Otherwise, default to returning all users
-    return jsonify(users.fetch_all_users())
+    else:
+        error_message = {'error': 'Missing or malformed parameters'}
+        return jsonify(error_message)
+
+
+# =============
+#   QUESTIONS
+# =============
+
+@app.route('/question/fetchall', methods=['GET'])
+def get_all_questions():
+    return jsonify(question.fetch_all_questions())
+
+@app.route('/question/fetchallids', methods=['GET'])
+def get_all_question_ids():
+    return jsonify(question.fetch_all_question_ids())
+
+@app.route('/question/fetchbyid', methods=['GET'])
+def get_question_by_id():
+    _id = request.args.get('id', None)
+    if _id:
+        return jsonify(question.fetch_question_by_id(_id))
+    else:
+        error_message = {'error': 'Missing or malformed parameters'}
+        return jsonify(error_message)
 
 if __name__ == '__main__':
     app.run(threaded=True, port=5000)
-    
