@@ -4,6 +4,7 @@
 from flask import Flask, request, jsonify, render_template
 from users import Users
 from question import Question
+import queue
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
@@ -18,6 +19,11 @@ question = Question()
 # question.add_question_data(queue_id=100, asker_uuid=90, question_text="Zoey's intriguing question???")
 # question.add_question_data(queue_id=100, asker_uuid=88, question_text="David's second interesting question???")
 
+# queue = queue.Queue()
+# queue.add_queue_data(qId=100, instructorID=88, location="Siebel 0220", status=True, motd="Do not copy")
+# queue.offer(100, 1)
+# queue.offer(100, 2)
+# queue.offer(100, 3)
 
 @app.route('/')
 def index():
@@ -70,6 +76,20 @@ def get_question_by_id():
     else:
         error_message = {'error': 'Missing or malformed parameters'}
         return jsonify(error_message)
+
+# =============
+#   QUEUES
+# =============
+
+@app.route('/queue/peek', methods=['GET'])
+def peek_queue_by_id():
+    _id = request.args.get('id', None)
+    if _id:
+        return jsonify(queue.peek(_id))
+    else:
+        error_message = {'error': 'Missing or malformed parameters'}
+        return jsonify(error_message)
+
 
 if __name__ == '__main__':
     app.run(threaded=True, port=5000)
