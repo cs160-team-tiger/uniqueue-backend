@@ -4,18 +4,10 @@ import time
 class OHQueue:
     def __init__(self):
         self.queue_db = tinydb.TinyDB(f'data/queue.json')
-        # queue_matadata = {
-        #     "_id": -1,
-        #     "container": [],
-        #     "instructorID": -1,
-        #     "location": "Siebel 1404",
-        #     "startTime": -1,
-        #     "status": False,
-        #     "motd": "DummyHead", 
-        # }
-        # self.queue_db.insert(queue_matadata)
 
-    def add_queue_data(self, queue_id, instructor_id, location, status, motd):
+    def add_queue_data(self, instructor_id, location, status, motd, queue_id=None):
+        if not queue_id:
+            queue_id = utils.get_next_available_id('queue.json')
         queue_metadata = {
             '_id': queue_id,
             'question_ids': [],
