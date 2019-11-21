@@ -13,7 +13,7 @@ class OHQueue:
             'question_ids': [],
             'instructor_id': instructor_id,
             'location': location,
-            'startTime': int(time.time()),
+            'start_time': int(time.time()),
             'status': status,
             'motd': motd
         }
