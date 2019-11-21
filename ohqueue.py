@@ -1,7 +1,7 @@
 import tinydb
 import time
 
-class Queue:
+class OHQueue:
     def __init__(self):
         self.queue_db = tinydb.TinyDB(f'data/queue.json')
         # queue_matadata = {
@@ -71,7 +71,7 @@ class Queue:
 
 def debug(keep_changes=False):
 
-    testQ = Queue()
+    testQ = OHQueue()
     testQ.add_queue_data(queue_id=100, instructor_id=88, location="Siebel 0220", status=True, motd="Do not copy")
     testQ.add_queue_data(queue_id=101, instructor_id=89, location="Jacobs 320", status=True, motd="If you feel the need to cry, please step outside.")
     testQ.offer(100, 1)

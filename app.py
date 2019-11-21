@@ -4,7 +4,7 @@
 from flask import Flask, request, jsonify, render_template
 from users import Users
 from question import Question
-import queue
+from ohqueue import OHQueue
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
@@ -19,7 +19,7 @@ question = Question()
 # question.add_question_data(queue_id=100, asker_uuid=90, question_text="Zoey's intriguing question???")
 # question.add_question_data(queue_id=100, asker_uuid=88, question_text="David's second interesting question???")
 
-queue = queue.Queue()
+queue = OHQueue()
 # queue.add_queue_data(queue_id=100, instructor_id=88, location="Siebel 0220", status=True, motd="Do not copy")
 # queue.add_queue_data(queue_id=101, instructor_id=89, location="Jacobs 320", status=True, motd="Don't cry.")
 # queue.offer(100, 100)
