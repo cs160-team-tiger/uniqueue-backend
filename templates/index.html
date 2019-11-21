@@ -5,7 +5,12 @@
 <br><a href="/users/fetchbyuuid?uuid=88"> GET /users/fetchbyuuid?uuid=88</a> (get user 88, aka David)
 <br><a href="/users/fetchbyemail?email=peng@berkeley.edu"> GET /users/fetchbyemail?email=peng@berkeley.edu</a>  (get a user that doesnt exist)
 
-<br><b>Questions</b>
+<br><br><b>Questions</b>
 <br><a href="/question/fetchall">GET /question/fetchall</a> (get all questions)
 <br><a href="/question/fetchallids">GET /question/fetchallids</a> (get all question IDs)
-<br><a href="/question/fetchbyid?id=101"> GET question/fetchbyid?id=101</a>  (fetch question ID #101)
+<br><a href="/question/fetchbyid?id=101"> GET /question/fetchbyid?id=101</a>  (fetch question ID #101)
+
+<br><br><b>Queues</b>
+<br><a href="/queue/fetchall">GET /queue/fetchall</a> (get all info about all queues)
+<br><a href="/queue/fetchbyid?id=100">GET /queue/fetchbyid?id=100</a> (get info about queue #100)
+<br><a href="/queue/peek?id=100"> GET /queue/peek?id=100</a>  (fetch the first question from queue #101)

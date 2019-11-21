@@ -67,6 +67,9 @@ class OHQueue:
         queue_result = self.fetch_queue_by_qid(question_id)
         queue_container = list(queue_result.get("question_ids"))
         return len(queue_container)
+
+    def fetch_all_queues(self):
+        return self.queue_db.all()
     
 
 def debug(keep_changes=False):
