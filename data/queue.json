@@ -1,1 +1,1 @@
-{"_default": {}}
+{"_default": {"1": {"_id": 100, "question_ids": [100, 101, 102], "instructor_id": 88, "location": "Siebel 0220", "startTime": 1574370876, "status": true, "motd": "Do not copy"}, "2": {"_id": 101, "question_ids": [], "instructor_id": 89, "location": "Jacobs 320", "startTime": 1574370876, "status": true, "motd": "Don't cry."}}}

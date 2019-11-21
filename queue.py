@@ -20,11 +20,11 @@ class Queue:
         # }
         # self.queue_db.insert(queue_matadata)
 
-    def add_queue_data(self, qId, instructorID, location, status, motd):
+    def add_queue_data(self, queue_id, instructor_id, location, status, motd):
         queue_metadata = {
-            '_id': qId,
-            'container': [],
-            'instructorID': instructorID,
+            '_id': queue_id,
+            'question_ids': [],
+            'instructor_id': instructor_id,
             'location': location,
             'startTime': int(time.time()),
             'status': status,
@@ -32,53 +32,53 @@ class Queue:
         }
         self.queue_db.insert(queue_metadata)  
 
-    def fetch_queue_by_qid(self, qId):
-        if not isinstance(qId, int):
-            qId = int(qId)
-        results = self.queue_db.search(tinydb.Query()._id == qId)
+    def fetch_queue_by_qid(self, queue_id):
+        if not isinstance(queue_id, int):
+            queue_id = int(queue_id)
+        results = self.queue_db.search(tinydb.Query()._id == queue_id)
         if not results:
-            return {'error': 'No Queue matching the parameters could be found'}
+            return {'error': 'No queue matching the parameters could be found'}
         return results[0] 
 
-    def create_queue_if_doesnt_exist(self, qId, instructorID, location, status, motd):
-        queue_result = self.fetch_queue_by_qid(qId)
+    def create_queue_if_doesnt_exist(self, queue_id, instructor_id, location, status, motd):
+        queue_result = self.fetch_queue_by_qid(queue_id)
         if queue_result:
             return queue_result
-        self.add_queue_data(qId, instructorID, location, status, motd)
+        self.add_queue_data(queue_id, instructor_id, location, status, motd)
 
-    def offer(self, qId, questionId):
-        queue_result = self.fetch_queue_by_qid(qId)
-        queue_container = queue_result.get('container')
-        queue_container.append(questionId)
-        self.queue_db.update({'container': queue_container}, tinydb.Query()._id == qId)
+    def offer(self, queue_id, question_id):
+        queue_result = self.fetch_queue_by_qid(queue_id)
+        queue_container = queue_result.get('question_ids')
+        queue_container.append(question_id)
+        self.queue_db.update({'question_ids': queue_container}, tinydb.Query()._id == queue_id)
 
 
-    def poll(self, qId):
-        queue_result = self.fetch_queue_by_qid(qId)
-        queue_container = queue_result.get("container")
-        poped_value = queue_container.popleft()
-        self.queue_db.update({'container': queue_container}, tinydb.Query()._id == qId)
-        return poped_value
+    def poll(self, queue_id):
+        queue_result = self.fetch_queue_by_qid(queue_id)
+        queue_container = queue_result.get('question_ids')
+        popped_value = queue_container.popleft()
+        self.queue_db.update({'question_ids': queue_container}, tinydb.Query()._id == queue_id)
+        return popped_value
 
-    def peek(self, qId):
-        queue_result = self.fetch_queue_by_qid(qId)
-        queue_container = queue_result.get('container')
+    def peek(self, question_id):
+        queue_result = self.fetch_queue_by_qid(question_id)
+        queue_container = queue_result.get('question_ids')
         if (len(queue_container) == 0):
-            return json.dumps("Nobody is in the Queue right now!")
+            return {'error': 'Nobody is in the queue right now'}
         else:
-            return json.dumps(queue_container[0])
+            return queue_container[0]
 
-    def size(self, qId):
-        queue_result = self.fetch_queue_by_qid(qId)
-        queue_container = list(queue_result.get("container"))
+    def size(self, question_id):
+        queue_result = self.fetch_queue_by_qid(question_id)
+        queue_container = list(queue_result.get("question_ids"))
         return len(queue_container)
     
 
 def debug(keep_changes=False):
 
     testQ = Queue()
-    testQ.add_queue_data(qId=100, instructorID=88, location="Siebel 0220", status=True, motd="Do not copy")
-    testQ.add_queue_data(qId=101, instructorID=88, location="Siebel 0224", status=True, motd="Do not copy")
+    testQ.add_queue_data(queue_id=100, instructor_id=88, location="Siebel 0220", status=True, motd="Do not copy")
+    testQ.add_queue_data(queue_id=101, instructor_id=89, location="Jacobs 320", status=True, motd="If you feel the need to cry, please step outside.")
     testQ.offer(100, 1)
     testQ.offer(100, 2)
     testQ.offer(100, 3)
