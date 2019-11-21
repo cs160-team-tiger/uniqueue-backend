@@ -3,7 +3,7 @@
 
 from flask import Flask, request, jsonify, render_template
 from users import Users
-from question import Question
+from questions import Questions
 from ohqueue import OHQueue
 
 app = Flask(__name__)
@@ -14,10 +14,10 @@ users.create_user_if_doesnt_exist(88, "David Xiong", "david@berkeley.edu")
 users.create_user_if_doesnt_exist(89, "Jiewen Lai", "jiewen@berkeley.edu")
 users.create_user_if_doesnt_exist(90, "Zoey Cao", "zoey@berkeley.edu")
 
-question = Question()
-# question.add_question_data(queue_id=100, asker_uuid=88, question_text="David's interesting question???")
-# question.add_question_data(queue_id=100, asker_uuid=90, question_text="Zoey's intriguing question???")
-# question.add_question_data(queue_id=100, asker_uuid=88, question_text="David's second interesting question???")
+questions = Questions()
+# questions.add_question_data(queue_id=100, asker_uuid=88, question_text="David's interesting question???")
+# questions.add_question_data(queue_id=100, asker_uuid=90, question_text="Zoey's intriguing question???")
+# questions.add_question_data(queue_id=100, asker_uuid=88, question_text="David's second interesting question???")
 
 ohqueue = OHQueue()
 # queue.add_queue_data(instructor_id=88, location="Siebel 0220", status=True, motd="Do not copy")
@@ -61,19 +61,19 @@ def get_user_by_email():
 #   QUESTIONS
 # =============
 
-@app.route('/question/fetchall', methods=['GET'])
+@app.route('/questions/fetchall', methods=['GET'])
 def get_all_questions():
-    return jsonify(question.fetch_all_questions())
+    return jsonify(questions.fetch_all_questions())
 
-@app.route('/question/fetchallids', methods=['GET'])
+@app.route('/questions/fetchallids', methods=['GET'])
 def get_all_question_ids():
-    return jsonify(question.fetch_all_question_ids())
+    return jsonify(questions.fetch_all_question_ids())
 
-@app.route('/question/fetchbyid', methods=['GET'])
+@app.route('/questions/fetchbyid', methods=['GET'])
 def get_question_by_id():
     _id = request.args.get('id', None)
     if _id:
-        return jsonify(question.fetch_question_by_id(_id))
+        return jsonify(questions.fetch_question_by_id(_id))
     else:
         error_message = {'error': 'Missing or malformed parameters'}
         return jsonify(error_message)

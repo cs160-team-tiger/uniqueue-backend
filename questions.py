@@ -5,7 +5,7 @@ import tinydb
 import utils
 import time
 
-class Question:
+class Questions:
 	def __init__(self):
 		self.question_db = tinydb.TinyDB(f'data/question.json')
 
@@ -55,21 +55,21 @@ class Question:
 
 
 def debug(keep_changes=True):
-	question = Question()
+	questions = Questions()
 
 	if not keep_changes:
 		print(" > WARNING: keep_changes is set to False! Data will be purged!")
 	
 	# Test adding questions
-	question.add_question_data(queue_id=100, asker_uuid=88, question_text="David's interesting question???")
-	question.add_question_data(queue_id=100, asker_uuid=90, question_text="Zoey's intriguing question???")
+	questions.add_question_data(queue_id=100, asker_uuid=88, question_text="David's interesting question???")
+	questions.add_question_data(queue_id=100, asker_uuid=90, question_text="Zoey's intriguing question???")
 		
 	# Test fetching questions
 	print(question.fetch_all_question_ids())
 	print(question.fetch_question_by_id(101))
 
 	if not keep_changes:
-		question.question_db.purge()
+		questions.question_db.purge()
 		print(" > DEBUG: Purged users database")
 
 # debug(keep_changes=False)
