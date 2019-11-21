@@ -1,10 +1,5 @@
 import tinydb
-import users
 import time
-import question
-import json
-from flask import Flask, request, jsonify, render_template
-
 
 class Queue:
     def __init__(self):
@@ -86,7 +81,7 @@ def debug(keep_changes=False):
     print(testQ.peek(100))
     if not keep_changes:
         testQ.queue_db.purge()
-        print(" > DEBUG: Purged users database")
+        print(" > DEBUG: Purged queue database")
 
 if __name__ == "__main__":
     debug(False)
