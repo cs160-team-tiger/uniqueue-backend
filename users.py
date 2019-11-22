@@ -21,9 +21,11 @@ class Users:
 
 	def create_user_if_doesnt_exist(self, uuid, name, email, asked_question_ids=[]):
 		user_result = self.fetch_user_by_uuid(uuid)
+		if "error" in user_result and user_result["error"] == "No users matching the parameters could be found":
+			self.add_user_data(uuid, name, email, asked_question_ids)	
 		if user_result:
 			return user_result
-		self.add_user_data(uuid, name, email, asked_question_ids)
+		return {"Error": f"Could not create user {uuid} due to an unknown error"}
 
 	# =====================
 	#  Fetch users by data

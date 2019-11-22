@@ -1,5 +1,6 @@
 import tinydb
 import time
+import utils
 
 class OHQueue:
     def __init__(self):
@@ -17,7 +18,9 @@ class OHQueue:
             'status': status,
             'motd': motd
         }
-        self.queue_db.insert(queue_metadata)  
+        self.queue_db.insert(queue_metadata) 
+        print(f" > DEBUG: Created queue {queue_id} at {location} (Instructor UUID: {instructor_id})")
+        return queue_metadata 
 
     def fetch_queue_by_qid(self, queue_id):
         if not isinstance(queue_id, int):
@@ -33,11 +36,40 @@ class OHQueue:
             return queue_result
         self.add_queue_data(queue_id, instructor_id, location, status, motd)
 
-    def offer(self, queue_id, question_id):
-        queue_result = self.fetch_queue_by_qid(queue_id)
-        queue_container = queue_result.get('question_ids')
-        queue_container.append(question_id)
-        self.queue_db.update({'question_ids': queue_container}, tinydb.Query()._id == queue_id)
+    # Question ID management 
+
+    def add_question_id_to_queue(self, queue_id, question_id):
+        queue_data = self.fetch_queue_by_qid(queue_id)
+        if "error" in queue_data:
+            return {"error": f"No queue matching the queue ID {queue_id} could be found while appending question ID {question_id}"}
+        if "question_ids" not in queue_data:
+            return {"error": f"Malformed queue dict: no entry 'question_ids' in queue {queue_id}"}
+        queue_data['question_ids'].append(question_id)
+        self.queue_db.update({'question_ids': queue_data['question_ids']}, tinydb.Query()._id == queue_id)
+        return queue_data
+
+    def remove_question_id_from_queue(self, queue_id, question_id):
+        queue_data = self.fetch_queue_by_qid(queue_id)
+        if "error" in queue_data:
+            return {"error": f"No queue matching the queue ID {queue_id} could be found while appending question ID {question_id}"}
+        if "question_ids" not in queue_data:
+            return {"error": f"Malformed queue dict: no entry 'question_ids' in queue {queue_id}"}
+        if question_id not in queue_data['question_ids']:
+            return {"error": f"Could not remove question {question_id} from queue {queue_id}: no entry was found"}
+        queue_data['question_ids'].remove(question_id)
+        self.queue_db.update({'question_ids': queue_data['question_ids']}, tinydb.Query()._id == queue_id)
+        return queue_data
+
+    # Queue Utilities
+
+    # Depricated method!
+    # This is currently an almost-duplicate of add_question_id_to_queue.
+    
+    # def offer(self, queue_id, question_id):
+    #     queue_result = self.fetch_queue_by_qid(queue_id)
+    #     queue_container = queue_result.get('question_ids')
+    #     queue_container.append(question_id)
+    #     self.queue_db.update({'question_ids': queue_container}, tinydb.Query()._id == queue_id)
 
 
     def poll(self, queue_id):
