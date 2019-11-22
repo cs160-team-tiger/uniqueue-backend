@@ -27,8 +27,8 @@ def add_debug_data():
     #questions.add_question_data(queue_id=100, asker_uuid=90, question_text="Zoey's intriguing question???")
     #questions.add_question_data(queue_id=100, asker_uuid=88, question_text="David's second interesting question???")
 
-    ohqueue.add_queue_data(instructor_id=88, location="Siebel 0220", status=True, motd="Do not copy")
-    ohqueue.add_queue_data(instructor_id=89, location="Jacobs 320", status=True, motd="Don't cry.")
+    ohqueue.add_queue_data(instructor_id=88, location="Siebel 0220", is_open=True, motd="Do not copy")
+    ohqueue.add_queue_data(instructor_id=89, location="Jacobs 320", is_open=True, motd="Don't cry.")
 
     #(self, queue_id, student_uuid, question_text, question_attachments=[]):
     controller.add_question_to_queue(queue_id=100, student_uuid=88, question_text="Question A")

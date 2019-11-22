@@ -6,7 +6,7 @@ class OHQueue:
     def __init__(self):
         self.queue_db = tinydb.TinyDB(f'data/queue.json')
 
-    def add_queue_data(self, instructor_id, location, status, motd, queue_id=None):
+    def add_queue_data(self, instructor_id, location, is_open, motd, queue_id=None):
         if not queue_id:
             queue_id = utils.get_next_available_id('queue.json')
         queue_metadata = {
@@ -15,7 +15,7 @@ class OHQueue:
             'instructor_id': instructor_id,
             'location': location,
             'start_time': int(time.time()),
-            'status': status,
+            'is_open': is_open,
             'motd': motd
         }
         self.queue_db.insert(queue_metadata) 
@@ -30,11 +30,11 @@ class OHQueue:
             return {'error': 'No queue matching the parameters could be found'}
         return results[0] 
 
-    def create_queue_if_doesnt_exist(self, queue_id, instructor_id, location, status, motd):
+    def create_queue_if_doesnt_exist(self, queue_id, instructor_id, location, is_open, motd):
         queue_result = self.fetch_queue_by_qid(queue_id)
         if queue_result:
             return queue_result
-        self.add_queue_data(queue_id, instructor_id, location, status, motd)
+        self.add_queue_data(queue_id, instructor_id, location, is_open, motd)
 
     # Question ID management 
 
@@ -64,7 +64,7 @@ class OHQueue:
 
     # Depricated method!
     # This is currently an almost-duplicate of add_question_id_to_queue.
-    
+
     # def offer(self, queue_id, question_id):
     #     queue_result = self.fetch_queue_by_qid(queue_id)
     #     queue_container = queue_result.get('question_ids')
@@ -99,8 +99,8 @@ class OHQueue:
 def debug(keep_changes=False):
 
     testQ = OHQueue()
-    testQ.add_queue_data(queue_id=100, instructor_id=88, location="Siebel 0220", status=True, motd="Do not copy")
-    testQ.add_queue_data(queue_id=101, instructor_id=89, location="Jacobs 320", status=True, motd="If you feel the need to cry, please step outside.")
+    testQ.add_queue_data(queue_id=100, instructor_id=88, location="Siebel 0220", is_open=True, motd="Do not copy")
+    testQ.add_queue_data(queue_id=101, instructor_id=89, location="Jacobs 320", is_open=True, motd="If you feel the need to cry, please step outside.")
     testQ.offer(100, 1)
     testQ.offer(100, 2)
     testQ.offer(100, 3)

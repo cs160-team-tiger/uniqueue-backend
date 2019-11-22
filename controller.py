@@ -18,8 +18,11 @@ class Controller():
     # =======================
 
     def add_question_to_queue(self, queue_id, student_uuid, question_text, question_attachments=[]):
-        # Check if student is already in queue
         queue_data = self.ohqueue.fetch_queue_by_qid(queue_id)
+        # Check if the queue is open
+        if not queue_data["is_open"]:
+            return {"error": f"{student_uuid}'s question could not be added to queue {queue_id}: the queue is closed."}
+        # Check if student is already in queue
         error_if_student_already_in_queue = self.check_if_student_currently_in_queue(queue_id, student_uuid)
         if isinstance(error_if_student_already_in_queue, dict):
             return error_if_student_already_in_queue
