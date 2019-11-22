@@ -25,6 +25,8 @@ class Controller():
         # Check if student is already in queue
         error_if_student_already_in_queue = self.check_if_student_currently_in_queue(queue_id, student_uuid)
         if isinstance(error_if_student_already_in_queue, dict):
+            if "error" not in error_if_student_already_in_queue:
+                return {"error": f"Student {student_uuid} is already in queue {queue_id}!"}
             return error_if_student_already_in_queue
         # Student is not already in queue! Add question.
         new_question_data = self.questions.add_question_data(queue_id=queue_id, asker_uuid=student_uuid, question_text=question_text, question_attachments=question_attachments)
@@ -63,8 +65,10 @@ class Controller():
                     return {"error": f"Question {question_id} has mismatched queue ID: found {question_data['queue_id']} but expected {queue_id}"}
             if "asker_uuid" in question_data:
                 if question_data["asker_uuid"] == student_uuid:
-                    return {"error": f"Student {student_uuid} is already in queue {queue_id}"}
-        return
+                    #return {"error": f"Student {student_uuid} is already in queue {queue_id}"}
+                    # Return the question that the student asked
+                    return question_data
+        return None
 
 
     # TODO
