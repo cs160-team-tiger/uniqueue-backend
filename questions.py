@@ -34,7 +34,7 @@ class Questions:
 		results = self.question_db.search(tinydb.Query()._id == _id)
 		if not results:
 			return {'error': 'No questions matching the parameters could be found'}
-		return results
+		return results[0]
 
 	def fetch_all_questions(self):
 		return self.question_db.all()

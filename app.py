@@ -5,26 +5,42 @@ from flask import Flask, request, jsonify, render_template
 from users import Users
 from questions import Questions
 from ohqueue import OHQueue
+from controller import Controller
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 users = Users()
-users.create_user_if_doesnt_exist(88, "David Xiong", "david@berkeley.edu")
-users.create_user_if_doesnt_exist(89, "Jiewen Lai", "jiewen@berkeley.edu")
-users.create_user_if_doesnt_exist(90, "Zoey Cao", "zoey@berkeley.edu")
-
 questions = Questions()
-# questions.add_question_data(queue_id=100, asker_uuid=88, question_text="David's interesting question???")
-# questions.add_question_data(queue_id=100, asker_uuid=90, question_text="Zoey's intriguing question???")
-# questions.add_question_data(queue_id=100, asker_uuid=88, question_text="David's second interesting question???")
-
 ohqueue = OHQueue()
-# queue.add_queue_data(instructor_id=88, location="Siebel 0220", status=True, motd="Do not copy")
-# queue.add_queue_data(instructor_id=89, location="Jacobs 320", status=True, motd="Don't cry.")
-# queue.offer(100, 100)
-# queue.offer(100, 101)
-# queue.offer(100, 102)
+controller = Controller()
+
+# =========
+#   DEBUG
+# =========
+def add_debug_data():
+    users.create_user_if_doesnt_exist(88, "David Xiong", "david@berkeley.edu")
+    users.create_user_if_doesnt_exist(89, "Jiewen Lai", "jiewen@berkeley.edu")
+    users.create_user_if_doesnt_exist(90, "Zoey Cao", "zoey@berkeley.edu")
+
+    #questions.add_question_data(queue_id=100, asker_uuid=88, question_text="David's interesting question???")
+    #questions.add_question_data(queue_id=100, asker_uuid=90, question_text="Zoey's intriguing question???")
+    #questions.add_question_data(queue_id=100, asker_uuid=88, question_text="David's second interesting question???")
+
+    ohqueue.add_queue_data(instructor_id=88, location="Siebel 0220", status=True, motd="Do not copy")
+    ohqueue.add_queue_data(instructor_id=89, location="Jacobs 320", status=True, motd="Don't cry.")
+
+    #(self, queue_id, student_uuid, question_text, question_attachments=[]):
+    controller.add_question_to_queue(queue_id=100, student_uuid=88, question_text="Question A")
+    controller.add_question_to_queue(queue_id=100, student_uuid=90, question_text="Question B")
+    controller.add_question_to_queue(queue_id=101, student_uuid=88, question_text="Question C")
+    controller.add_question_to_queue(queue_id=101, student_uuid=89, question_text="Question D")
+
+# Comment out this following line to populate database with test data
+# add_debug_data()
+
+
+
 
 @app.route('/')
 def index():
@@ -78,9 +94,9 @@ def get_question_by_id():
         error_message = {'error': 'Missing or malformed parameters'}
         return jsonify(error_message)
 
-# =============
+# ===========
 #   QUEUES
-# =============
+# ===========
 
 @app.route('/queue/peek', methods=['GET'])
 def fetch_queue_by_id():
@@ -104,6 +120,23 @@ def peek_queue_by_id():
 def get_all_queues():
     return jsonify(ohqueue.fetch_all_queues())
 
+# =========
+#   DEBUG
+# =========
+def add_debug_data():
+    users.create_user_if_doesnt_exist(88, "David Xiong", "david@berkeley.edu")
+    users.create_user_if_doesnt_exist(89, "Jiewen Lai", "jiewen@berkeley.edu")
+    users.create_user_if_doesnt_exist(90, "Zoey Cao", "zoey@berkeley.edu")
+
+    questions.add_question_data(queue_id=100, asker_uuid=88, question_text="David's interesting question???")
+    questions.add_question_data(queue_id=100, asker_uuid=90, question_text="Zoey's intriguing question???")
+    questions.add_question_data(queue_id=100, asker_uuid=88, question_text="David's second interesting question???")
+
+    ohqueue.add_queue_data(instructor_id=88, location="Siebel 0220", status=True, motd="Do not copy")
+    ohqueue.add_queue_data(instructor_id=89, location="Jacobs 320", status=True, motd="Don't cry.")
+    ohqueue.offer(100, 100)
+    ohqueue.offer(100, 101)
+    ohqueue.offer(100, 102)
 
 if __name__ == '__main__':
     app.run(threaded=True, port=5000)
