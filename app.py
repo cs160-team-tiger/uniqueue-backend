@@ -111,7 +111,7 @@ def fetch_queue_by_id():
 def peek_queue_by_id():
     _id = request.args.get('id', None)
     if _id:
-        return jsonify(ohqueue.fetch_queue_by_qid(int(_id)))
+        return jsonify(ohqueue.fetch_queue_by_qid(_id))
     else:
         error_message = {'error': 'Missing or malformed parameters'}
         return jsonify(error_message)
@@ -120,11 +120,25 @@ def peek_queue_by_id():
 def get_all_queues():
     return jsonify(ohqueue.fetch_all_queues())
 
-@app.route('/queue/offer', methods=['GET'])
+# @app.route('/queue/offer', methods=['GET'])
+# def create_question_to_queue():
+#     _asker_uuid = request.args.get('asker_uuid', None)
+#     _queue_id = request.args.get('queue_id', None)
+#     _question_text = request.args.get('question_text', None)
+
+#     result = controller.add_question_to_queue(queue_id=_queue_id, student_uuid=_asker_uuid, question_text=_question_text)
+
+#     if _asker_uuid != None and _queue_id != None and _question_text != None:
+#         return jsonify(result)
+#     else:
+#         error_message = {'error': 'Missing or malformed parameters'}
+#         return jsonify(error_message)
+
+@app.route('/queue/offer', methods=['POST'])
 def create_question_to_queue():
-    _asker_uuid = request.args.get('asker_uuid', None)
-    _queue_id = request.args.get('queue_id', None)
-    _question_text = request.args.get('question_text', None)
+    _asker_uuid = request.form.get('asker_uuid', None)
+    _queue_id = request.form.get('queue_id', None)
+    _question_text = request.form.get('question_text', None)
 
     result = controller.add_question_to_queue(queue_id=_queue_id, student_uuid=_asker_uuid, question_text=_question_text)
 
