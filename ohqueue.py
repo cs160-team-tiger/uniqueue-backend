@@ -39,6 +39,7 @@ class OHQueue:
     # Question ID management 
 
     def add_question_id_to_queue(self, queue_id, question_id):
+        queue_id = int(queue_id)
         queue_data = self.fetch_queue_by_qid(queue_id)
         if "error" in queue_data:
             return {"error": f"No queue matching the queue ID {queue_id} could be found while appending question ID {question_id}"}

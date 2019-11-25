@@ -18,6 +18,8 @@ class Controller():
     # =======================
 
     def add_question_to_queue(self, queue_id, student_uuid, question_text, question_attachments=[]):
+        queue_id = int(queue_id)
+        student_uuid = int(student_uuid)
         queue_data = self.ohqueue.fetch_queue_by_qid(queue_id)
         # Check if the queue is open
         if not queue_data["is_open"]:
@@ -33,7 +35,7 @@ class Controller():
         add_question_id_result = self.ohqueue.add_question_id_to_queue(queue_id, new_question_data["_id"])
         if "error" in add_question_id_result:
             return add_question_id_result
-        return queue_data, new_question_data
+        return add_question_id_result, new_question_data, "Success!"
 
     def remove_question_from_queue(self, queue_id, question_id):
         queue_data = self.ohqueue.fetch_queue_by_qid(queue_id)
@@ -61,7 +63,7 @@ class Controller():
             if "error" in question_data:
                 return {"error:": f"Question {question_id} returned error: {question_data['error']}"}
             if "queue_id" in question_data:
-                if question_data["queue_id"] != queue_id:
+                if int(question_data["queue_id"]) != int(queue_id):
                     return {"error": f"Question {question_id} has mismatched queue ID: found {question_data['queue_id']} but expected {queue_id}"}
             if "asker_uuid" in question_data:
                 if question_data["asker_uuid"] == student_uuid:

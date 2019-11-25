@@ -111,7 +111,7 @@ def fetch_queue_by_id():
 def peek_queue_by_id():
     _id = request.args.get('id', None)
     if _id:
-        return jsonify(ohqueue.fetch_queue_by_qid(_id))
+        return jsonify(ohqueue.fetch_queue_by_qid(int(_id)))
     else:
         error_message = {'error': 'Missing or malformed parameters'}
         return jsonify(error_message)
@@ -126,7 +126,7 @@ def create_question_to_queue():
     _queue_id = request.args.get('queue_id', None)
     _question_text = request.args.get('question_text', None)
 
-    result = controller.add_question_to_queue(_queue_id, _asker_uuid, _question_text, question_attachments=[])
+    result = controller.add_question_to_queue(queue_id=_queue_id, student_uuid=_asker_uuid, question_text=_question_text)
 
     if _asker_uuid != None and _queue_id != None and _question_text != None:
         return jsonify(result)
@@ -136,20 +136,20 @@ def create_question_to_queue():
 # =========
 #   DEBUG
 # =========
-def add_debug_data():
-    users.create_user_if_doesnt_exist(88, "David Xiong", "david@berkeley.edu")
-    users.create_user_if_doesnt_exist(89, "Jiewen Lai", "jiewen@berkeley.edu")
-    users.create_user_if_doesnt_exist(90, "Zoey Cao", "zoey@berkeley.edu")
+# def add_debug_data():
+#     users.create_user_if_doesnt_exist(88, "David Xiong", "david@berkeley.edu")
+#     users.create_user_if_doesnt_exist(89, "Jiewen Lai", "jiewen@berkeley.edu")
+#     users.create_user_if_doesnt_exist(90, "Zoey Cao", "zoey@berkeley.edu")
 
-    questions.add_question_data(queue_id=100, asker_uuid=88, question_text="David's interesting question???")
-    questions.add_question_data(queue_id=100, asker_uuid=90, question_text="Zoey's intriguing question???")
-    questions.add_question_data(queue_id=100, asker_uuid=88, question_text="David's second interesting question???")
+#     questions.add_question_data(queue_id=100, asker_uuid=88, question_text="David's interesting question???")
+#     questions.add_question_data(queue_id=100, asker_uuid=90, question_text="Zoey's intriguing question???")
+#     questions.add_question_data(queue_id=100, asker_uuid=88, question_text="David's second interesting question???")
 
-    ohqueue.add_queue_data(instructor_id=88, location="Siebel 0220", is_open=True, motd="Do not copy")
-    ohqueue.add_queue_data(instructor_id=89, location="Jacobs 320", is_open=True, motd="Don't cry.")
-    # ohqueue.add_question_id_to_queue(100, 100)
-    # ohqueue.add_question_id_to_queue(100, 101)
-    # ohqueue.add_question_id_to_queue(100, 102)
+#     ohqueue.add_queue_data(instructor_id=88, location="Siebel 0220", is_open=True, motd="Do not copy")
+#     ohqueue.add_queue_data(instructor_id=89, location="Jacobs 320", is_open=True, motd="Don't cry.")
+#     ohqueue.add_question_id_to_queue(100, 100)
+#     ohqueue.add_question_id_to_queue(100, 101)
+#     ohqueue.add_question_id_to_queue(100, 102)
 
 if __name__ == '__main__':
     # add_debug_data()
