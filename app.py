@@ -120,6 +120,19 @@ def peek_queue_by_id():
 def get_all_queues():
     return jsonify(ohqueue.fetch_all_queues())
 
+@app.route('/queue/offer', methods=['GET'])
+def create_question_to_queue():
+    _asker_uuid = request.args.get('asker_uuid', None)
+    _queue_id = request.args.get('queue_id', None)
+    _question_text = request.args.get('question_text', None)
+
+    result = controller.add_question_to_queue(_queue_id, _asker_uuid, _question_text, question_attachments=[])
+
+    if _asker_uuid != None and _queue_id != None and _question_text != None:
+        return jsonify(result)
+    else:
+        error_message = {'error': 'Missing or malformed parameters'}
+        return jsonify(error_message)
 # =========
 #   DEBUG
 # =========
@@ -132,11 +145,12 @@ def add_debug_data():
     questions.add_question_data(queue_id=100, asker_uuid=90, question_text="Zoey's intriguing question???")
     questions.add_question_data(queue_id=100, asker_uuid=88, question_text="David's second interesting question???")
 
-    ohqueue.add_queue_data(instructor_id=88, location="Siebel 0220", status=True, motd="Do not copy")
-    ohqueue.add_queue_data(instructor_id=89, location="Jacobs 320", status=True, motd="Don't cry.")
-    ohqueue.offer(100, 100)
-    ohqueue.offer(100, 101)
-    ohqueue.offer(100, 102)
+    ohqueue.add_queue_data(instructor_id=88, location="Siebel 0220", is_open=True, motd="Do not copy")
+    ohqueue.add_queue_data(instructor_id=89, location="Jacobs 320", is_open=True, motd="Don't cry.")
+    # ohqueue.add_question_id_to_queue(100, 100)
+    # ohqueue.add_question_id_to_queue(100, 101)
+    # ohqueue.add_question_id_to_queue(100, 102)
 
 if __name__ == '__main__':
+    # add_debug_data()
     app.run(threaded=True, port=5000)
