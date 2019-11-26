@@ -21,21 +21,25 @@ class Controller():
         queue_id = int(queue_id)
         student_uuid = int(student_uuid)
         queue_data = self.ohqueue.fetch_queue_by_qid(queue_id)
+        # check if the ID is valid
+        if "error" in queue_data or queue_data == None:
+            return {"msg": f"{queue_id} is an invalid queue ID!", 'status':False}
         # Check if the queue is open
         if not queue_data["is_open"]:
-            return {"error": f"{student_uuid}'s question could not be added to queue {queue_id}: the queue is closed."}
+            return {"msg": f"{student_uuid}'s question could not be added to queue {queue_id}: the queue is closed.", 'status':False}
         # Check if student is already in queue
         error_if_student_already_in_queue = self.check_if_student_currently_in_queue(queue_id, student_uuid)
         if isinstance(error_if_student_already_in_queue, dict):
             if "error" not in error_if_student_already_in_queue:
-                return {"error": f"Student {student_uuid} is already in queue {queue_id}!"}
-            return error_if_student_already_in_queue
+                return {"msg": f"Student {student_uuid} is already in queue {queue_id}!", 'status':False}
+            return {'msg': error_if_student_already_in_queue, 'status': False}
         # Student is not already in queue! Add question.
         new_question_data = self.questions.add_question_data(queue_id=queue_id, asker_uuid=student_uuid, question_text=question_text, question_attachments=question_attachments)
         add_question_id_result = self.ohqueue.add_question_id_to_queue(queue_id, new_question_data["_id"])
         if "error" in add_question_id_result:
-            return add_question_id_result
-        return add_question_id_result, new_question_data, "Success!"
+            return {'msg': add_question_id_result, 'status':False}
+        retval = {'queue':add_question_id_result, 'question':new_question_data, 'status': True}
+        return retval
 
     def remove_question_from_queue(self, queue_id, question_id):
         queue_data = self.ohqueue.fetch_queue_by_qid(queue_id)

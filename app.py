@@ -166,5 +166,5 @@ def create_question_to_queue():
 #     ohqueue.add_question_id_to_queue(100, 102)
 
 if __name__ == '__main__':
-    # add_debug_data()
+    add_debug_data()
     app.run(threaded=True, port=5000)

@@ -5,7 +5,7 @@ import utils
 class OHQueue:
     def __init__(self):
         self.queue_db = tinydb.TinyDB(f'data/queue.json')
-        self.queue_db.DEFAULT_TABLE_KWARGS = {'cache_size': 0}
+        # self.queue_db.DEFAULT_TABLE_KWARGS = {'cache_size': 0}
 
     def add_queue_data(self, instructor_id, location, is_open, motd, queue_id=None):
         if not queue_id:
