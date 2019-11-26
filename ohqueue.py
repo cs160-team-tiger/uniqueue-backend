@@ -5,6 +5,7 @@ import utils
 class OHQueue:
     def __init__(self):
         self.queue_db = tinydb.TinyDB(f'data/queue.json')
+        self.queue_db.DEFAULT_TABLE_KWARGS = {'cache_size': 0}
 
     def add_queue_data(self, instructor_id, location, is_open, motd, queue_id=None):
         if not queue_id:
@@ -25,10 +26,11 @@ class OHQueue:
     def fetch_queue_by_qid(self, queue_id):
         if not isinstance(queue_id, int):
             queue_id = int(queue_id)
-        results = self.queue_db.search(tinydb.Query()._id == queue_id)
-        if not results:
+        result = self.queue_db.get(tinydb.Query()._id == queue_id)
+        print(result)
+        if not result:
             return {'error': 'No queue matching the parameters could be found'}
-        return results[0] 
+        return result
 
     def create_queue_if_doesnt_exist(self, queue_id, instructor_id, location, is_open, motd):
         queue_result = self.fetch_queue_by_qid(queue_id)
