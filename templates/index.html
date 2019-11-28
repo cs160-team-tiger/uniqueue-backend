@@ -326,6 +326,107 @@ div.prism-show-language > div.prism-show-language-label {
 <li>(Should be submitted via form data)</li>
 </ul>
 
+<h2 id="toc_5">Data Fields</h2>
+
+<h3 id="toc_6">User</h3>
+
+<ul>
+<li><code>_uuid</code>: A unique integer (may become a String later) that describes the user. Cannot be changed.</li>
+<li><code>asked_question_ids</code>: A list of question IDs that this student has asked</li>
+<li><code>email</code>: The student&#39;s email</li>
+<li><code>name</code>: The student&#39;s full name</li>
+</ul>
+
+<h3 id="toc_7">Question</h3>
+
+<ul>
+<li><code>_id</code>: A unique integer that describes the question. Cannot be changed.</li>
+<li><code>queue_id</code>: The ID of the queue this question was asked in.</li>
+<li><code>asker_uuid</code>: The UUID of the student asking the question.</li>
+<li><code>question_text</code>: The contents of the question, as a string.</li>
+<li><code>question_attachments</code>: A list of strings, each containing a link to an image the student has attached to their question.</li>
+<li><code>status</code>: A string representing the current status of the question. The only valid entries for this field are &quot;incomplete&quot;, &quot;assigned&quot;, &quot;helping&quot;, and &quot;resolved&quot;.</li>
+<li><code>assigned_uuid</code>: The UUID of the instructor assigned to help with this question. Can be nil.</li>
+<li><code>answered_uuid</code>: The UUID of the instructor that resolved this question. Only has a value if the question is marked &quot;resolved&quot;, otherwise is nil.</li>
+<li><code>creation_time</code>: The time (in Unix Time) the question was first created</li>
+</ul>
+
+<h3 id="toc_8">Queue</h3>
+
+<ul>
+<li><code>_id</code>: A unique integer that describes the queue. Cannot be changed.</li>
+<li><code>queue_name</code>: The name of the queue.</li>
+<li><code>instructor_id</code>: the UUID of the instructor who created and is in charge of the queue. <strong>NOTE: Will be changed to <code>instructor_uuid</code> in the near future!</strong></li>
+<li><code>question_ids</code>: A list of question IDs (ints) that have been asked in this OH. This acts as a queue - as such, all entries are guaranteed to be in chronological order</li>
+<li><code>location_name</code>: The name of the location (eg. &quot;Soda 301&quot;)</li>
+<li><code>location_longitude</code> and <code>location_latitude</code>: The longitude and latitude of the location, as a double</li>
+<li><code>motd</code>: The <em>Message of the Day</em> (a short pinned &quot;introduction&quot; blurb that is displayed at the top with all the other queue info)</li>
+<li><code>is_open</code>: Whether the queue is currently open or closed, as a boolean.</li>
+<li><code>start_time</code>: The time (in Unix Time) the queue was first created</li>
+</ul>
+
+<h2 id="toc_9">Half-Assed API Reference</h2>
+
+<h3 id="toc_10">Add a Question to a Queue</h3>
+
+<p><em>POST</em> <code>/queue/offer</code></p>
+
+<p><strong>NOTE: Will be renamed to <code>/queue/startnew</code> in the near future!</strong></p>
+
+<p>Required Parameters:</p>
+
+<ul>
+<li><code>queue_id</code>: The ID of the queue you want to post the question to</li>
+<li><code>asker_uuid</code>: The UUID of the student asking the question</li>
+<li><code>question_text</code>: The text body of the question</li>
+<li><strong>Coming Soon</strong> <code>question_attachments</code>: ?</li>
+</ul>
+
+<p>Returns:</p>
+
+<ul>
+<li><code>queue</code>: The current reading of the queue, or an error if not successful</li>
+<li><code>question</code>: The new question&#39;s data, or an error if not successful</li>
+<li><code>status</code>: True if the operation completed successfully, false otherwise.</li>
+</ul>
+
+<h3 id="toc_11">Removing a Question From a Queue</h3>
+
+<p>TODO: Create this endpoint</p>
+
+<h3 id="toc_12">Question Status and Instructor Assignment:</h3>
+
+<p><strong>Assign an Instructor</strong>:  <em>POST</em> <code>/questions/assigninstructor</code></p>
+
+<p><strong>Mark Question as Helping</strong>:  <em>POST</em> <code>/questions/markhelping</code></p>
+
+<p><strong>Mark Question as Resolved</strong>:  <em>POST</em> <code>/questions/markhelping</code></p>
+
+<p>Required Parameters:</p>
+
+<ul>
+<li><code>id</code>: The question ID</li>
+<li><code>instructor_uuid</code>: The UUID of the instructor you wish to assign</li>
+</ul>
+
+<p>Returns: </p>
+
+<p>The object representation of the question, or a dictionary containing a key <code>error</code> otherwise</p>
+
+<h3 id="toc_13">Reverting Question and Instructor Assignment Status</h3>
+
+<p><em>POST</em> <code>/questions/assigninstructor</code></p>
+
+<p>Required Parameters:</p>
+
+<ul>
+<li><code>id</code>: The question ID</li>
+</ul>
+
+<p>Returns: </p>
+
+<p>The object representation of the question, or a dictionary containing a key <code>error</code> otherwise</p>
+
 
 
 <script type="text/javascript">
