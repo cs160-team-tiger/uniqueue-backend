@@ -9,7 +9,7 @@ class Questions:
 	def __init__(self):
 		self.question_db = tinydb.TinyDB(f'data/question.json')
 
-	def add_question_data(self, queue_id, asker_uuid, question_text, assigned_uuid=None, answered_uuid=None, question_attachments=[]):
+	def add_question_data(self, queue_id, asker_uuid, question_text, status="incomplete", assigned_uuid=None, answered_uuid=None, question_attachments=[]):
 		_id = utils.get_next_available_id('question.json')
 		question_dict = {
 			'_id': _id,
@@ -19,7 +19,8 @@ class Questions:
 			'answered_uuid': answered_uuid,
 			'question_text': question_text,
 			'question_attachments': question_attachments,
-			'creation_time': int(time.time())
+			'creation_time': int(time.time()),
+			'status': status
 		}
 		self.question_db.insert(question_dict)
 		print(f" > DEBUG: Created question {_id} (Asker UUID: {asker_uuid})")
@@ -33,7 +34,7 @@ class Questions:
 			_id = int(_id)
 		results = self.question_db.search(tinydb.Query()._id == _id)
 		if not results:
-			return {'error': 'No questions matching the parameters could be found'}
+			return {'error': f'No questions matching ID {_id} could be found'}
 		return results[0]
 
 	def fetch_all_questions(self):
@@ -46,12 +47,14 @@ class Questions:
 	#  Update question data
 	# ==================
 
-	# TODO: Update this function to be able to edit questions (currently it's just copy pasted from Users.py)
-	# def update_user_info(self, uuid, updated_name=None, updated_email=None):
-	# 	if updated_name:
-	# 		self.users_db.update({'name': name}, tinydb.Query()._uuid == uuid)
-	# 	if updated_email:
-	# 		self.users_db.update({'email': email}, tinydb.Query()._uuid == uuid)
+	def change_question_status(self, _id, status):
+		if status not in ['incomplete', 'assigned', 'helping', 'resolved']:
+			return {'error': f'{status} is not a valid status. Must be: incomplete, assigned, helping, or resolved.'}
+		_id = int(_id)
+		question_data = self.fetch_question_by_id(_id)
+		if "error" in question_data:
+			return {'error': f'No questions matching ID {_id} could be found; question status not changed'}
+		self.question_db.update({'status': status}, tinydb.Query()._id == _id)
 
 
 def debug(keep_changes=True):

@@ -7,37 +7,39 @@ class OHQueue:
         self.queue_db = tinydb.TinyDB(f'data/queue.json')
         # self.queue_db.DEFAULT_TABLE_KWARGS = {'cache_size': 0}
 
-    def add_queue_data(self, instructor_id, location, is_open, motd, queue_id=None):
+    def add_queue_data(self, queue_name, instructor_id, location_name, is_open, motd, location_latitude, location_longitude, queue_id=None):
         if not queue_id:
             queue_id = utils.get_next_available_id('queue.json')
         queue_metadata = {
+            'queue_name': queue_name,
             '_id': queue_id,
             'question_ids': [],
             'instructor_id': instructor_id,
-            'location': location,
+            'location_name': location_name,
             'start_time': int(time.time()),
             'is_open': is_open,
-            'motd': motd
+            'motd': motd,
+            'location_latitude': location_latitude,
+            'location_longitude': location_longitude
         }
         self.queue_db.insert(queue_metadata) 
-        print(f" > DEBUG: Created queue {queue_id} at {location} (Instructor UUID: {instructor_id})")
+        print(f" > DEBUG: Created queue {queue_id} at {location_name} (Instructor UUID: {instructor_id})")
         return queue_metadata 
 
     def fetch_queue_by_qid(self, queue_id):
         if not isinstance(queue_id, int):
             queue_id = int(queue_id)
         result = self.queue_db.get(tinydb.Query()._id == queue_id)
-        print(result)
         if not result:
             return {'error': 'No queue matching the parameters could be found'}
         return result
 
-    def create_queue_if_doesnt_exist(self, queue_id, instructor_id, location, is_open, motd):
+    def create_queue_if_doesnt_exist(self, queue_id, queue_name, instructor_id, location_name, is_open, motd, location_latitude, location_longitude):
         queue_result = self.fetch_queue_by_qid(queue_id)
         if queue_result:
             return queue_result
-        self.add_queue_data(queue_id, instructor_id, location, is_open, motd)
-
+        self.add_queue_data(queue_name=queue_name, instructor_id=instructor_id, location_name=location_name, is_open=is_open,
+                            motd=motd, location_latitude=location_latitude, location_longitude=location_longitude, queue_id=queue_id)
     # Question ID management 
 
     def add_question_id_to_queue(self, queue_id, question_id):
@@ -102,8 +104,8 @@ class OHQueue:
 def debug(keep_changes=False):
 
     testQ = OHQueue()
-    testQ.add_queue_data(queue_id=100, instructor_id=88, location="Siebel 0220", is_open=True, motd="Do not copy")
-    testQ.add_queue_data(queue_id=101, instructor_id=89, location="Jacobs 320", is_open=True, motd="If you feel the need to cry, please step outside.")
+    testQ.add_queue_data(queue_id=100, instructor_id=88, location="Siebel 0220", is_open=True, motd="Do not copy", location_latitude=31.231, location_longitude=-131.221)
+    testQ.add_queue_data(queue_id=101, instructor_id=89, location="Jacobs 320", is_open=True, motd="If you feel the need to cry, please step outside.", location_latitude=21.431, location_longitude=-111.441)
     testQ.offer(100, 1)
     testQ.offer(100, 2)
     testQ.offer(100, 3)
@@ -113,5 +115,5 @@ def debug(keep_changes=False):
         testQ.queue_db.purge()
         print(" > DEBUG: Purged queue database")
 
-if __name__ == "__main__":
-    debug(False)
+# if __name__ == "__main__":
+#     debug(False)
