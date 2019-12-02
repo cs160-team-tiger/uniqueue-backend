@@ -188,7 +188,17 @@ def create_question_to_queue():
     result = controller.add_question_to_queue(queue_id=_queue_id, student_uuid=_asker_uuid, question_text=_question_text)
     return jsonify(result)
 
-
+@app.route('/queue/create', methods=['POST'])
+def create_queue_in_db():
+    _queue_name = request.form.get('queue_name', None)
+    _instructor_id = request.form.get('instructor_id', None)
+    _location_name = request.form.get('location_name', None)
+    _is_open = request.form.get('is_open', None)
+    _motd = request.form.get('motd', None)
+    _location_latitude = request.form.get('location_latitude', None)
+    _location_longitude = request.form.get('location_longitude', None)
+    result = ohqueue.add_queue_data(_queue_name, _instructor_id, _location_name, _is_open, _motd, _location_latitude, _location_longitude)
+    return jsonify(result)
 
 
 # =========
