@@ -2,6 +2,9 @@
 # CS160 FA19 Final Project - UniQueue
 
 from flask import Flask, request, jsonify, render_template
+from werkzeug.utils import secure_filename
+import os
+
 from users import Users
 from questions import Questions
 from ohqueue import OHQueue
@@ -9,6 +12,7 @@ from controller import Controller
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
+IMAGE_UPLOAD_FOLDER = "static/question_assets"
 
 users = Users()
 questions = Questions()
@@ -37,6 +41,7 @@ def add_debug_data():
     controller.add_question_to_queue(queue_id=102, student_uuid=89, question_text="Question F is incomprehensible")
     controller.add_question_to_queue(queue_id=102, student_uuid=92, question_text="Question G is okay at best")
 
+    controller.assign_image_to_question(101, "static/question_assets/101_q5screenshot.jpg")
     controller.assign_instructor_to_question(101, 88)
     controller.mark_question_as_resolved(100, 90)
     controller.mark_question_as_helping(104, 92)
@@ -122,6 +127,7 @@ def mark_question_as_helping():
         instructor_uuid = request.args.get('instructor_uuid', None)
         if not question_id or not instructor_uuid:
             error_message = {'error': 'Missing or malformed parameters'}
+            return jsonify(error_message)
     result = controller.mark_question_as_helping(question_id=question_id, instructor_uuid=instructor_uuid)
     return jsonify(result)
 
@@ -134,6 +140,7 @@ def mark_question_as_resolved():
         instructor_uuid = request.args.get('instructor_uuid', None)
         if not question_id or not instructor_uuid:
             error_message = {'error': 'Missing or malformed parameters'}
+            return jsonify(error_message)
     result = controller.mark_question_as_resolved(question_id=question_id, instructor_uuid=instructor_uuid)
     return jsonify(result)
 
@@ -144,7 +151,46 @@ def revert_question_to_incomplete():
         question_id = request.args.get('id', None)
         if not question_id:
             error_message = {'error': 'Missing or malformed parameters'}
+            return jsonify(error_message)
     result = controller.revert_question_to_incomplete(question_id=question_id)
+    return jsonify(result)
+
+@app.route('/questions/uploadimage', methods=['POST'])
+def upload_image_to_question():
+    def allowed_file(filename):
+        return '.' in filename and \
+               filename.rsplit('.', 1)[1].lower() in ['jpg', 'jpeg', 'png']
+    question_id = request.form.get('id', None)
+    if not question_id:
+        question_id = request.args.get('id', None)
+        if not question_id:
+            error_message = {'error': 'Missing or malformed parameter "id"'}
+            return jsonify(error_message)
+    if 'file' not in request.files:
+        error_message = {'error': 'No image file attached'}
+        return jsonify(error_message)
+    file = request.files['file']
+    if file.filename == '':
+        error_message = {'error': 'Attached image file cannot have an empty name'}
+        return jsonify(error_message)
+    if file:
+        if not allowed_file(file.filename):
+            result = {'error': 'Attached image file must be of type jpg, jpeg, or png'}
+        filename = secure_filename(file.filename).strip(' ')
+        filepath = os.path.join(IMAGE_UPLOAD_FOLDER, f"{question_id}_{filename}")
+        file.save(filepath)
+        result = controller.assign_image_to_question(question_id, f"/{filepath}")
+    return jsonify(result)
+
+@app.route('/questions/removeimage', methods=['POST'])
+def remove_image_from_question():
+    question_id = request.form.get('id', None)
+    if not question_id:
+        question_id = request.args.get('id', None)
+        if not question_id:
+            error_message = {'error': 'Missing or malformed parameter "id"'}
+            return jsonify(error_message)
+    result = controller.assign_image_to_question(question_id, None)
     return jsonify(result)
 
 # ===========
@@ -197,9 +243,19 @@ def create_queue_in_db():
     _motd = request.form.get('motd', None)
     _location_latitude = request.form.get('location_latitude', None)
     _location_longitude = request.form.get('location_longitude', None)
+    if not _queue_name or not _instructor_id or not _location_name or not _is_open or not _motd or not _location_latitude or not _location_longitude:
+        _queue_name = request.args.get('queue_name', None)
+        _instructor_id = request.args.get('instructor_id', None)
+        _location_name = request.args.get('location_name', None)
+        _is_open = request.args.get('is_open', None)
+        _motd = request.args.get('motd', None)
+        _location_latitude = request.args.get('location_latitude', None)
+        _location_longitude = request.args.get('location_longitude', None)
+        if not _queue_name or not _instructor_id or not _location_name or not _is_open or not _motd or not _location_latitude or not _location_longitude:
+            error_message = {'error': 'Missing or malformed parameters'}
+            return jsonify(error_message)
     result = ohqueue.add_queue_data(_queue_name, _instructor_id, _location_name, _is_open, _motd, _location_latitude, _location_longitude)
     return jsonify(result)
-
 
 # =========
 #   DEBUG

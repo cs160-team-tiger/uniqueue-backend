@@ -9,7 +9,7 @@ class Questions:
 	def __init__(self):
 		self.question_db = tinydb.TinyDB(f'data/question.json')
 
-	def add_question_data(self, queue_id, asker_uuid, question_text, status="incomplete", assigned_uuid=None, answered_uuid=None, question_attachments=[]):
+	def add_question_data(self, queue_id, asker_uuid, question_text, status="incomplete", assigned_uuid=None, answered_uuid=None, question_attachments=None):
 		_id = utils.get_next_available_id('question.json')
 		question_dict = {
 			'_id': _id,
