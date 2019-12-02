@@ -257,6 +257,19 @@ def create_queue_in_db():
     result = ohqueue.add_queue_data(_queue_name, _instructor_id, _location_name, _is_open, _motd, _location_latitude, _location_longitude)
     return jsonify(result)
 
+@app.route('/queue/setmotd', methods=['POST'])
+def set_queue_motd():
+    _queue_id = request.form.get('queue_id', None)
+    _motd = request.form.get('motd', None)
+    if not _queue_id or not _motd:
+        _queue_id = request.args.get('queue_id', None)
+        _motd = request.args.get('motd', None)
+        if not _queue_id or not _motd:
+            error_message = {'error': 'Missing or malformed parameters'}
+            return jsonify(error_message)
+    result = ohqueue.set_motd(_queue_id, _motd)
+    return jsonify(result)
+
 @app.route('/queue/open', methods=['POST'])
 def open_queue():
     _queue_id = request.form.get('queue_id', None)

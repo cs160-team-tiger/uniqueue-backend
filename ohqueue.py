@@ -23,7 +23,7 @@ class OHQueue:
             'location_longitude': location_longitude
         }
         self.queue_db.insert(queue_metadata) 
-        print(f" > DEBUG: Created queue {queue_id} at {location_name} (Instructor UUID: {instructor_id})")
+        print(f" > DEBUG: Created queue #{queue_id} ('{queue_name}') at {location_name} (Instructor UUID: {instructor_id})")
         return queue_metadata 
 
     def fetch_queue_by_qid(self, queue_id):
@@ -50,6 +50,7 @@ class OHQueue:
             return {"error": f"No queue matching the queue ID {queue_id} could be found while appending question ID {question_id}"}
         if "question_ids" not in queue_data:
             return {"error": f"Malformed queue dict: no entry 'question_ids' in queue {queue_id}"}
+        print(f" > DEBUG: Adding question {question_id} from queue {queue_id}")
         queue_data['question_ids'].append(question_id)
         self.queue_db.update({'question_ids': queue_data['question_ids']}, tinydb.Query()._id == queue_id)
         return self.fetch_queue_by_qid(queue_id)
@@ -59,13 +60,24 @@ class OHQueue:
             queue_id = int(queue_id)
         queue_data = self.fetch_queue_by_qid(queue_id)
         if "error" in queue_data:
-            return {"error": f"No queue matching the queue ID {queue_id} could be found while appending question ID {question_id}"}
+            return {"error": f"No queue matching the queue ID {queue_id} could be found while removing question ID {question_id}"}
         if "question_ids" not in queue_data:
             return {"error": f"Malformed queue dict: no entry 'question_ids' in queue {queue_id}"}
         if question_id not in queue_data['question_ids']:
             return {"error": f"Could not remove question {question_id} from queue {queue_id}: no entry was found"}
+        print(f" > DEBUG: Removing question {question_id} from queue {queue_id}")
         queue_data['question_ids'].remove(question_id)
         self.queue_db.update({'question_ids': queue_data['question_ids']}, tinydb.Query()._id == queue_id)
+        return self.fetch_queue_by_qid(queue_id)
+
+    def set_motd(self, queue_id, motd):
+        if not isinstance(queue_id, int):
+            queue_id = int(queue_id)
+        queue_data = self.fetch_queue_by_qid(queue_id)
+        if "error" in queue_data:
+            return {"error": f"No queue matching the queue ID {queue_id} could be found to set a MOTD"}
+        print(f" > DEBUG: Setting queue {queue_id}'s MOTD to '{motd}'")
+        self.queue_db.update({'motd': motd}, tinydb.Query()._id == queue_id)
         return self.fetch_queue_by_qid(queue_id)
 
     def open_queue(self, queue_id):
@@ -73,9 +85,10 @@ class OHQueue:
             queue_id = int(queue_id)
         queue_data = self.fetch_queue_by_qid(queue_id)
         if "error" in queue_data:
-            return {"error": f"No queue matching the queue ID {queue_id} could be found while appending question ID {question_id}"}
+            return {"error": f"No queue matching the queue ID {queue_id} could be found to open"}
         if queue_data['is_open']:
             return {"error": f"Queue {queue_id} is already open!"}
+        print(f" > DEBUG: Opening queue {queue_id}")
         self.queue_db.update({'is_open': True}, tinydb.Query()._id == queue_id)
         return self.fetch_queue_by_qid(queue_id)
 
@@ -84,9 +97,10 @@ class OHQueue:
             queue_id = int(queue_id)
         queue_data = self.fetch_queue_by_qid(queue_id)
         if "error" in queue_data:
-            return {"error": f"No queue matching the queue ID {queue_id} could be found while appending question ID {question_id}"}
+            return {"error": f"No queue matching the queue ID {queue_id} could be found to close"}
         if not queue_data['is_open']:
             return {"error": f"Queue {queue_id} is already closed!"}
+        print(f" > DEBUG: Closing queue {queue_id}")
         self.queue_db.update({'is_open': False}, tinydb.Query()._id == queue_id)
         return self.fetch_queue_by_qid(queue_id)
 

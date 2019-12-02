@@ -485,7 +485,22 @@ div.prism-show-language > div.prism-show-language-label {
 
 <p>The object representation of the queue, or a dictionary containing a key <code>error</code> otherwise</p>
 
-<h3 id="toc_17">Opening and Closing a Queue</h3>
+<h3 id="toc_17">Setting/Changing a Queue&#39;s MOTD (Intro Message)</h3>
+
+<p><em>POST</em> <code>/queue/setmotd</code></p>
+
+<p>Required Parameters:</p>
+
+<ul>
+<li><code>queue_id</code>: The ID of the queue you wish to open or close</li>
+<li><code>motd</code>: The text of your intro message</li>
+</ul>
+
+<p>Returns:</p>
+
+<p>The object representation of the queue, or a dictionary containing a key <code>error</code> otherwise</p>
+
+<h3 id="toc_18">Opening and Closing a Queue</h3>
 
 <p><em>POST</em> <code>/queue/open</code></p>
 <p><em>POST</em> <code>/queue/close</code></p>
