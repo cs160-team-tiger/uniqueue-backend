@@ -429,6 +429,76 @@ div.prism-show-language > div.prism-show-language-label {
 
 <p>The object representation of the question, or a dictionary containing a key <code>error</code> otherwise</p>
 
+<h3 id="toc_14">Uploading an Image to a Question</h3>
+
+<p><em>POST</em> <code>/questions/uploadimage</code></p>
+
+<p>Required Parameters:</p>
+
+<ul>
+<li><code>id</code>: The ID of the question you are uploading to</li>
+</ul>
+
+<p>Required Body Fields:</p>
+
+<ul>
+<li><code>file</code>: The image file you are uploading. Must be a <code>jpg</code>, <code>jpeg</code>, or <code>png</code>.</li>
+</ul>
+
+<p>Note: You may have to add a <code>Content-Type</code> header of <code>multipart/form-dataitem</code> in order for this to work. <strong>Refer to <a href="https://imgur.com/a/mXTI6dv">this Postman configuration</a></strong>.</p>
+
+<p>Returns:</p>
+
+<p>The object representation of the question, or a dictionary containing a key <code>error</code> otherwise</p>
+
+<h3 id="toc_15">Removing an Image from a Question</h3>
+
+<p><em>POST</em> <code>/questions/removeimage</code></p>
+
+<p>Required Parameters:</p>
+
+<ul>
+<li><code>id</code>: The ID of the question you are removing the image from</li>
+</ul>
+
+<p>Returns:</p>
+
+<p>The object representation of the question, or a dictionary containing a key <code>error</code> otherwise</p>
+
+<h3 id="toc_16">Creating a Queue</h3>
+
+<p><em>POST</em> <code>/queue/create</code></p>
+
+<p>Required Parameters:</p>
+
+<ul>
+<li><code>queue_name</code>: The name of the queue</li>
+<li><code>instructor_id</code>: The UUID of the instructor creating the queue</li>
+<li><code>location_name</code>: The location of the queue</li>
+<li><code>is_open</code>: A boolean describing whether the queue is open or closed</li>
+<li><code>motd</code>: A small message that will display on the top of the queue</li>
+<li><code>location_latitude</code>: The latitude of the queue&#39;s origin</li>
+<li>- <code>location_longitude</code>: The longitude of the queue&#39;s origin</li>
+</ul>
+
+<p>Returns:</p>
+
+<p>The object representation of the queue, or a dictionary containing a key <code>error</code> otherwise</p>
+
+<h3 id="toc_17">Opening and Closing a Queue</h3>
+
+<p><em>POST</em> <code>/queue/open</code></p>
+<p><em>POST</em> <code>/queue/close</code></p>
+
+<p>Required Parameters:</p>
+
+<ul>
+<li><code>queue_id</code>: The ID of the queue you wish to open or close</li>
+</ul>
+
+<p>Returns:</p>
+
+<p>The object representation of the queue, or a dictionary containing a key <code>error</code> otherwise</p>
 
 
 <script type="text/javascript">
