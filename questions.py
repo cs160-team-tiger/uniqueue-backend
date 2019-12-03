@@ -4,9 +4,11 @@
 import tinydb
 import utils
 import time
+from users import Users
 
 class Questions:
 	def __init__(self):
+		self.users = Users()
 		self.question_db = tinydb.TinyDB(f'data/question.json')
 
 	def add_question_data(self, queue_id, asker_uuid, question_text, status="incomplete", assigned_uuid=None, answered_uuid=None, question_attachments=None):
@@ -15,8 +17,11 @@ class Questions:
 			'_id': _id,
 			'queue_id': queue_id,
 			'asker_uuid': asker_uuid,
+			'asker_name': self.users.fetch_user_by_uuid(asker_uuid)[0]['name'],
 			'assigned_uuid': assigned_uuid,
+			'assigned_name': self.users.fetch_user_by_uuid(assigned_uuid)[0]['name'] if assigned_uuid else None,
 			'answered_uuid': answered_uuid,
+			'answered_name': self.users.fetch_user_by_uuid(answered_uuid)[0]['name'] if answered_uuid else None,
 			'question_text': question_text,
 			'question_attachments': question_attachments,
 			'creation_time': int(time.time()),

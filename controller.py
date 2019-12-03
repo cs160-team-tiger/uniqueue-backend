@@ -88,6 +88,7 @@ class Controller():
         # We're good! Change the status of the question and assign the instructor
         self.questions.change_question_status(question_id, status="assigned")
         self.questions.question_db.update({"assigned_uuid": instructor_uuid}, tinydb.Query()._id == question_id)
+        self.questions.question_db.update({"assigned_name": self.users.fetch_user_by_uuid(instructor_uuid)[0]['name']}, tinydb.Query()._id == question_id)
         print(f" > DEBUG: Assigning question {question_id} to instructor {instructor_uuid}")
         return self.questions.fetch_question_by_id(question_id)
 
@@ -115,6 +116,7 @@ class Controller():
             self.assign_instructor_to_question(question_id, instructor_uuid)
         # Now mark the question status as resolved.
         self.questions.question_db.update({"answered_uuid": instructor_uuid}, tinydb.Query()._id == question_id)
+        self.questions.question_db.update({"answered_name": self.users.fetch_user_by_uuid(instructor_uuid)[0]['name']}, tinydb.Query()._id == question_id)
         change_status_result = self.questions.change_question_status(question_id, status="resolved")
         print(f" > DEBUG: Marking question {question_id} as 'resolved' (instructor: {instructor_uuid})")
         return self.questions.fetch_question_by_id(question_id) 
@@ -126,8 +128,10 @@ class Controller():
             return {'error': f'No questions matching ID {question_id} could be found. Could not mark as helping.'}
         if question_data['assigned_uuid']:
             self.questions.question_db.update({"assigned_uuid": None}, tinydb.Query()._id == question_id)
+            self.questions.question_db.update({"assigned_name": None}, tinydb.Query()._id == question_id)
         if question_data['answered_uuid']:
             self.questions.question_db.update({"answered_uuid": None}, tinydb.Query()._id == question_id)
+            self.questions.question_db.update({"answered_name": None}, tinydb.Query()._id == question_id)
         self.questions.change_question_status(question_id, status="incomplete")
         print(f" > DEBUG: Reverting question {question_id} to 'incomplete'")
         return self.questions.fetch_question_by_id(question_id) 
@@ -141,14 +145,4 @@ class Controller():
         print(f" > DEBUG: Assigned image {image_filepath} to {question_id}")
         return self.questions.fetch_question_by_id(question_id) 
 
-def debug():
-    controller = Controller()
-    print(controller.add_question_to_queue(100, 88, "Test question text"))
-    print(controller.add_question_to_queue(100, 88, "Test question text"))
-    question_data = controller.add_question_to_queue(100, 94, "Test question text")[1]
-    print(controller.ohqueue.fetch_queue_by_qid(100)["question_ids"])
-    print(controller.remove_question_from_queue(100, question_data["_id"]))
-    print(controller.ohqueue.fetch_queue_by_qid(100)["question_ids"])
-
-# debug()
 

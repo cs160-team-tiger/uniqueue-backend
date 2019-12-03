@@ -295,20 +295,17 @@ def close_queue():
 # =========
 #   DEBUG
 # =========
-# def add_debug_data():
-#     users.create_user_if_doesnt_exist(88, "David Xiong", "david@berkeley.edu")
-#     users.create_user_if_doesnt_exist(89, "Jiewen Lai", "jiewen@berkeley.edu")
-#     users.create_user_if_doesnt_exist(90, "Zoey Cao", "zoey@berkeley.edu")
 
-#     questions.add_question_data(queue_id=100, asker_uuid=88, question_text="David's interesting question???")
-#     questions.add_question_data(queue_id=100, asker_uuid=90, question_text="Zoey's intriguing question???")
-#     questions.add_question_data(queue_id=100, asker_uuid=88, question_text="David's second interesting question???")
-
-#     ohqueue.add_queue_data(instructor_id=88, location="Siebel 0220", is_open=True, motd="Do not copy")
-#     ohqueue.add_queue_data(instructor_id=89, location="Jacobs 320", is_open=True, motd="Don't cry.")
-#     ohqueue.add_question_id_to_queue(100, 100)
-#     ohqueue.add_question_id_to_queue(100, 101)
-#     ohqueue.add_question_id_to_queue(100, 102)
+@app.route('/debug/resetdata', methods=['GET'])
+def reset_all_data():
+    confirmation = request.args.get('confirm', None)
+    if not confirmation:
+        return jsonify({'error': 'Must set confirm flag to reset data'})
+    users.users_db.purge()
+    ohqueue.queue_db.purge()
+    questions.question_db.purge()
+    add_debug_data()
+    return jsonify({'result': 'Successfully reset all data'})
 
 if __name__ == '__main__':
     # add_debug_data()
