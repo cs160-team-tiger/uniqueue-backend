@@ -88,7 +88,7 @@ class Controller():
         # We're good! Change the status of the question and assign the instructor
         self.questions.change_question_status(question_id, status="assigned")
         self.questions.question_db.update({"assigned_uuid": instructor_uuid}, tinydb.Query()._id == question_id)
-        self.questions.question_db.update({"assigned_name": self.users.fetch_user_by_uuid(instructor_uuid)[0]['name']}, tinydb.Query()._id == question_id)
+        self.questions.question_db.update({"assigned_name": self.users.fetch_user_by_uuid(instructor_uuid)['name']}, tinydb.Query()._id == question_id)
         print(f" > DEBUG: Assigning question {question_id} to instructor {instructor_uuid}")
         return self.questions.fetch_question_by_id(question_id)
 
@@ -116,7 +116,7 @@ class Controller():
             self.assign_instructor_to_question(question_id, instructor_uuid)
         # Now mark the question status as resolved.
         self.questions.question_db.update({"answered_uuid": instructor_uuid}, tinydb.Query()._id == question_id)
-        self.questions.question_db.update({"answered_name": self.users.fetch_user_by_uuid(instructor_uuid)[0]['name']}, tinydb.Query()._id == question_id)
+        self.questions.question_db.update({"answered_name": self.users.fetch_user_by_uuid(instructor_uuid)['name']}, tinydb.Query()._id == question_id)
         change_status_result = self.questions.change_question_status(question_id, status="resolved")
         print(f" > DEBUG: Marking question {question_id} as 'resolved' (instructor: {instructor_uuid})")
         return self.questions.fetch_question_by_id(question_id) 

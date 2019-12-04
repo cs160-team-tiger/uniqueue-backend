@@ -33,19 +33,19 @@ class Users:
 	def fetch_user_by_uuid(self, uuid):
 		if not isinstance(uuid, int):
 			uuid = int(uuid)
-		results = self.users_db.search(tinydb.Query()._uuid == uuid)
+		results = self.users_db.get(tinydb.Query()._uuid == uuid)
 		if not results:
 			return {'error': 'No users matching the parameters could be found'}
 		return results
 
 	def fetch_user_by_name(self, name):
-		results = self.users_db.search(tinydb.Query().name == name)
+		results = self.users_db.get(tinydb.Query().name == name)
 		if not results:
 			return {'error': 'No users matching the parameters could be found'}
 		return results
 
 	def fetch_user_by_email(self, email):
-		results = self.users_db.search(tinydb.Query().email == email)
+		results = self.users_db.get(tinydb.Query().email == email)
 		if not results:
 			return {'error': 'No users matching the parameters could be found'}
 		return results

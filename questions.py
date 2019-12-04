@@ -17,11 +17,11 @@ class Questions:
 			'_id': _id,
 			'queue_id': queue_id,
 			'asker_uuid': asker_uuid,
-			'asker_name': self.users.fetch_user_by_uuid(asker_uuid)[0]['name'],
+			'asker_name': self.users.fetch_user_by_uuid(asker_uuid)['name'],
 			'assigned_uuid': assigned_uuid,
-			'assigned_name': self.users.fetch_user_by_uuid(assigned_uuid)[0]['name'] if assigned_uuid else None,
+			'assigned_name': self.users.fetch_user_by_uuid(assigned_uuid)['name'] if assigned_uuid else None,
 			'answered_uuid': answered_uuid,
-			'answered_name': self.users.fetch_user_by_uuid(answered_uuid)[0]['name'] if answered_uuid else None,
+			'answered_name': self.users.fetch_user_by_uuid(answered_uuid)['name'] if answered_uuid else None,
 			'question_text': question_text,
 			'question_attachments': question_attachments,
 			'creation_time': int(time.time()),
@@ -37,10 +37,10 @@ class Questions:
 	def fetch_question_by_id(self, _id):
 		if not isinstance(_id, int):
 			_id = int(_id)
-		results = self.question_db.search(tinydb.Query()._id == _id)
+		results = self.question_db.get(tinydb.Query()._id == _id)
 		if not results:
 			return {'error': f'No questions matching ID {_id} could be found'}
-		return results[0]
+		return results
 
 	def fetch_all_questions(self):
 		return self.question_db.all()
