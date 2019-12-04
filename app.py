@@ -32,6 +32,11 @@ def add_debug_data():
     users.create_user_if_doesnt_exist(94, "Oski Bear", "oski@berkeley.edu")
     users.create_user_if_doesnt_exist(95, "Carol Christ", "carol@berkeley.edu")
     users.create_user_if_doesnt_exist(96, "Peter Peter", "pumpkineater@berkeley.edu")
+    users.create_user_if_doesnt_exist(655677096, "Peng Gu", "otherpeng@berkeley.edu")
+    users.create_user_if_doesnt_exist(3035324241, "Sundi Xiao", "othersundi@berkeley.edu")
+    users.create_user_if_doesnt_exist(3031811472, "David Xiong", "otherdavid@berkeley.edu")
+    
+    
 
     ohqueue.add_queue_data(queue_name="David - CS61A", instructor_id=88, location_name="Soda 210", is_open=True, motd="Project 4 due next Tuesday. Ask Miriam if you have questions about homework.", location_latitude=31.231416, location_longitude=-123.125223)
     ohqueue.add_queue_data(queue_name="Jiewen's CS160 OH", instructor_id=89, location_name="Cory 441", is_open=True, motd="All homework questions are welcome. We will not be answering midterm questions.", location_latitude=31.231216, location_longitude=-123.125523)
