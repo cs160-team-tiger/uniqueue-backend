@@ -189,7 +189,7 @@ def add_debug_questions():
         question_text="I am trying to add users to my database and keep getting an error. I see that after creating the account, a user is added to 'Authentication' but it seems that nothing is actually added to my database. My database is set up so that anyone can make modifications. I'm not sure what the problem can be.")
 
 def add_debug_activity():
-    pass
+    controller.assign_image_to_question(101, "static/question_assets/101_q5screenshot.jpg")
 
 def reset_data():
     users.users_db.purge()
