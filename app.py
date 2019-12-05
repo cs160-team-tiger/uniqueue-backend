@@ -9,6 +9,7 @@ from users import Users
 from questions import Questions
 from ohqueue import OHQueue
 from controller import Controller
+import debug
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
@@ -22,44 +23,44 @@ controller = Controller()
 # =========
 #   DEBUG
 # =========
-def add_debug_data():
-    users.create_user_if_doesnt_exist(88, "David Xiong", "david@berkeley.edu")
-    users.create_user_if_doesnt_exist(89, "Jiewen Lai", "jiewen@berkeley.edu")
-    users.create_user_if_doesnt_exist(90, "Zoey Cao", "zoey@berkeley.edu")
-    users.create_user_if_doesnt_exist(91, "Peng Gu", "peng@berkeley.edu")
-    users.create_user_if_doesnt_exist(92, "Sundi Xiao", "zoey@berkeley.edu")
-    users.create_user_if_doesnt_exist(93, "James Student", "student@berkeley.edu")
-    users.create_user_if_doesnt_exist(94, "Oski Bear", "oski@berkeley.edu")
-    users.create_user_if_doesnt_exist(95, "Carol Christ", "carol@berkeley.edu")
-    users.create_user_if_doesnt_exist(96, "Peter Peter", "pumpkineater@berkeley.edu")
-    users.create_user_if_doesnt_exist(655677096, "Peng Gu", "otherpeng@berkeley.edu")
-    users.create_user_if_doesnt_exist(3035324241, "Sundi Xiao", "othersundi@berkeley.edu")
-    users.create_user_if_doesnt_exist(3031811472, "David Xiong", "otherdavid@berkeley.edu")
+# def add_debug_data():
+#     users.create_user_if_doesnt_exist(88, "David Xiong", "david@berkeley.edu")
+#     users.create_user_if_doesnt_exist(89, "Jiewen Lai", "jiewen@berkeley.edu")
+#     users.create_user_if_doesnt_exist(90, "Zoey Cao", "zoey@berkeley.edu")
+#     users.create_user_if_doesnt_exist(91, "Peng Gu", "peng@berkeley.edu")
+#     users.create_user_if_doesnt_exist(92, "Sundi Xiao", "zoey@berkeley.edu")
+#     users.create_user_if_doesnt_exist(93, "James Student", "student@berkeley.edu")
+#     users.create_user_if_doesnt_exist(94, "Oski Bear", "oski@berkeley.edu")
+#     users.create_user_if_doesnt_exist(95, "Carol Christ", "carol@berkeley.edu")
+#     users.create_user_if_doesnt_exist(96, "Peter Peter", "pumpkineater@berkeley.edu")
+#     users.create_user_if_doesnt_exist(655677096, "Peng Gu", "otherpeng@berkeley.edu")
+#     users.create_user_if_doesnt_exist(3035324241, "Sundi Xiao", "othersundi@berkeley.edu")
+#     users.create_user_if_doesnt_exist(3031811472, "David Xiong", "otherdavid@berkeley.edu")
     
     
 
-    ohqueue.add_queue_data(queue_name="David - CS61A", instructor_id=88, location_name="Soda 210", is_open=True, motd="Project 4 due next Tuesday. Ask Miriam if you have questions about homework.", location_latitude=31.231416, location_longitude=-123.125223)
-    ohqueue.add_queue_data(queue_name="Jiewen's CS160 OH", instructor_id=89, location_name="Cory 441", is_open=True, motd="All homework questions are welcome. We will not be answering midterm questions.", location_latitude=31.231216, location_longitude=-123.125523)
-    ohqueue.add_queue_data(queue_name="CS61B (Peng) Office Hours", instructor_id=91, location_name="Jacobs 220", is_open=True, motd="If you must cry, do it outside.", location_latitude=31.231222, location_longitude=-123.125515)
+#     ohqueue.add_queue_data(queue_name="David - CS61A", instructor_id=88, location_name="Soda 210", is_open=True, motd="Project 4 due next Tuesday. Ask Miriam if you have questions about homework.", location_latitude=31.231416, location_longitude=-123.125223)
+#     ohqueue.add_queue_data(queue_name="Jiewen's CS160 OH", instructor_id=89, location_name="Cory 441", is_open=True, motd="All homework questions are welcome. We will not be answering midterm questions.", location_latitude=31.231216, location_longitude=-123.125523)
+#     ohqueue.add_queue_data(queue_name="CS61B (Peng) Office Hours", instructor_id=91, location_name="Jacobs 220", is_open=True, motd="If you must cry, do it outside.", location_latitude=31.231222, location_longitude=-123.125515)
 
-    controller.add_question_to_queue(queue_id=100, student_uuid=88, question_text="Question A is intriguing")
-    controller.add_question_to_queue(queue_id=100, student_uuid=90, question_text="Question B is vexing")
-    controller.add_question_to_queue(queue_id=100, student_uuid=92, question_text="Question A is asinine")
-    controller.add_question_to_queue(queue_id=100, student_uuid=91, question_text="Question B makes me want to cry")
-    controller.add_question_to_queue(queue_id=100, student_uuid=94, question_text="Question C is too difficult for me")
-    controller.add_question_to_queue(queue_id=101, student_uuid=88, question_text="Question D is puzzling")
-    controller.add_question_to_queue(queue_id=101, student_uuid=89, question_text="Question C is so difficult")
-    controller.add_question_to_queue(queue_id=101, student_uuid=92, question_text="Question F is actually pretty easy")
-    controller.add_question_to_queue(queue_id=101, student_uuid=90, question_text="Question C is so stumping")
-    controller.add_question_to_queue(queue_id=102, student_uuid=89, question_text="Question C is incomprehensible")
-    controller.add_question_to_queue(queue_id=102, student_uuid=92, question_text="Question I is okay at best")
+#     controller.add_question_to_queue(queue_id=100, student_uuid=88, question_text="Question A is intriguing")
+#     controller.add_question_to_queue(queue_id=100, student_uuid=90, question_text="Question B is vexing")
+#     controller.add_question_to_queue(queue_id=100, student_uuid=92, question_text="Question A is asinine")
+#     controller.add_question_to_queue(queue_id=100, student_uuid=91, question_text="Question B makes me want to cry")
+#     controller.add_question_to_queue(queue_id=100, student_uuid=94, question_text="Question C is too difficult for me")
+#     controller.add_question_to_queue(queue_id=101, student_uuid=88, question_text="Question D is puzzling")
+#     controller.add_question_to_queue(queue_id=101, student_uuid=89, question_text="Question C is so difficult")
+#     controller.add_question_to_queue(queue_id=101, student_uuid=92, question_text="Question F is actually pretty easy")
+#     controller.add_question_to_queue(queue_id=101, student_uuid=90, question_text="Question C is so stumping")
+#     controller.add_question_to_queue(queue_id=102, student_uuid=89, question_text="Question C is incomprehensible")
+#     controller.add_question_to_queue(queue_id=102, student_uuid=92, question_text="Question I is okay at best")
 
-    controller.assign_image_to_question(101, "static/question_assets/101_q5screenshot.jpg")
-    controller.assign_instructor_to_question(101, 88)
-    controller.assign_instructor_to_question(109, 96)
-    controller.mark_question_as_resolved(100, 90)
-    controller.mark_question_as_helping(104, 95)
-    controller.mark_question_as_helping(106, 89)
+#     controller.assign_image_to_question(101, "static/question_assets/101_q5screenshot.jpg")
+#     controller.assign_instructor_to_question(101, 88)
+#     controller.assign_instructor_to_question(109, 96)
+#     controller.mark_question_as_resolved(100, 90)
+#     controller.mark_question_as_helping(104, 95)
+#     controller.mark_question_as_helping(106, 89)
 
 # Comment out this following line to populate database with test data
 # add_debug_data()
@@ -316,10 +317,11 @@ def reset_all_data():
     confirmation = request.args.get('confirm', None)
     if not confirmation:
         return jsonify({'error': 'Must set confirm flag to reset data'})
-    users.users_db.purge()
-    ohqueue.queue_db.purge()
-    questions.question_db.purge()
-    add_debug_data()
+    # users.users_db.purge()
+    # ohqueue.queue_db.purge()
+    # questions.question_db.purge()
+    # add_debug_data()
+    debug.reset_data()
     return jsonify({'result': 'Successfully reset all data'})
 
 if __name__ == '__main__':
