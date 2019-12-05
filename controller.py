@@ -141,7 +141,7 @@ class Controller():
         question_data = self.questions.fetch_question_by_id(question_id)
         if 'error' in question_data:
             return {'error': f'No questions matching ID {question_id} could be found. Could not mark as helping.'}
-        self.questions.question_db.update({"question_attachments": image_filepath}, tinydb.Query()._id == question_id)
+        self.questions.question_db.update({"question_attachments": f"/{image_filepath}"}, tinydb.Query()._id == question_id)
         print(f" > DEBUG: Assigned image {image_filepath} to {question_id}")
         return self.questions.fetch_question_by_id(question_id) 
 
