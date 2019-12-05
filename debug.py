@@ -113,7 +113,7 @@ def add_debug_queues():
 
 def add_debug_questions():
     # Oski's CS61A OHs
-    controller.add_question_to_queue(
+    controller.add_question_to_queue( # 100
         queue_id=100, 
         student_uuid=90, 
         question_text="HW 10 Q3: How do I get the size of a dog and its sibling in one select statement? ")
@@ -121,6 +121,7 @@ def add_debug_questions():
         queue_id=100, 
         student_uuid=98, 
         question_text="Any hints for how to approach make_s? The hint says elements of scale_stream(s, 2) are elements of s, but s is what we're trying to make, so how do I use this hint?")
+    controller.assign_image_to_question(101, "static/question_assets/101_q5screenshot.jpg")
     controller.add_question_to_queue(
         queue_id=100, 
         student_uuid=94, 
@@ -143,14 +144,16 @@ def add_debug_questions():
         queue_id=101, 
         student_uuid=97, 
         question_text="Proj 3: Is it reasonable to have the EdgeSize() method go through the data structure where edges are stored (for me it's an adjacency matrix 2d java array) and count them?  I know this is very slow runtime wise but I don't actually use this method anywhere else in my code.")
-    controller.add_question_to_queue(
+    controller.add_question_to_queue( # 107 (currently)
         queue_id=101, 
         student_uuid=98, 
-        question_text="In the HKN slides (slide 121), it says the runtime is O(ElogV) which is equal to O(ElogE). What do they mean by O(ElogE) = O(ElogV) and which is the proper runtime of Kruzcals? Is this runtime the same as Prims Algorithm?")
+        question_text="Fall 2009 1a - Why doesn't Queue Q3 include 1?")
+    controller.assign_image_to_question(107, "107_Screen_Shot_20161212_at_1.06.02_PM.png")
     controller.add_question_to_queue(
         queue_id=101, 
         student_uuid=94, 
-        question_text="I'm not exactly sure what the weight of a vertex should be. I initially thought it was the shortest distance from the source vertex, and should thus be initialized to 0 for the source vertex and infinity for the rest, but that's causing me to fail the autograder tests that look at the vertex weights. Basically, can we assume anything about what the vertex weights should be before beginning a search?")
+        question_text="In the solutions for discussion 11, isn't this a right leaning red-black tree? I thought we're only supposed to have left-leaning ones?")
+    controller.assign_image_to_question(108, "108_Screen_Shot_20161212_at_12.16.41_PM.png")
     controller.add_question_to_queue(
         queue_id=101, 
         student_uuid=96, 
@@ -158,7 +161,8 @@ def add_debug_questions():
     controller.add_question_to_queue(
         queue_id=101, 
         student_uuid=92, 
-        question_text="After poking around Piazza, I understand that pathTo in ShortestPaths could use another class extending Traversal (for its methods and generalized Traversal algorithm). Is it best to create a class inside ShortestPaths to extend Traversal, or add a whole separate class inside the graph package?")
+        question_text="Why is this a counting sort?")
+    controller.assign_image_to_question(110, "110_IMG_0005.jpeg")
     controller.add_question_to_queue(
         queue_id=101, 
         student_uuid=95, 
@@ -189,7 +193,7 @@ def add_debug_questions():
         question_text="I am trying to add users to my database and keep getting an error. I see that after creating the account, a user is added to 'Authentication' but it seems that nothing is actually added to my database. My database is set up so that anyone can make modifications. I'm not sure what the problem can be.")
 
 def add_debug_activity():
-    controller.assign_image_to_question(101, "static/question_assets/101_q5screenshot.jpg")
+    pass
 
 def reset_data():
     users.users_db.purge()
