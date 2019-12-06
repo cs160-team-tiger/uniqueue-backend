@@ -148,12 +148,12 @@ def add_debug_questions():
         queue_id=101, 
         student_uuid=98, 
         question_text="Fall 2009 1a - Why doesn't Queue Q3 include 1?")
-    controller.assign_image_to_question(107, "107_Screen_Shot_20161212_at_1.06.02_PM.png")
+    controller.assign_image_to_question(107, "static/question_assets/107_Screen_Shot_20161212_at_1.06.02_PM.png")
     controller.add_question_to_queue(
         queue_id=101, 
         student_uuid=94, 
         question_text="In the solutions for discussion 11, isn't this a right leaning red-black tree? I thought we're only supposed to have left-leaning ones?")
-    controller.assign_image_to_question(108, "108_Screen_Shot_20161212_at_12.16.41_PM.png")
+    controller.assign_image_to_question(108, "static/question_assets/108_Screen_Shot_20161212_at_12.16.41_PM.png")
     controller.add_question_to_queue(
         queue_id=101, 
         student_uuid=96, 
@@ -162,7 +162,7 @@ def add_debug_questions():
         queue_id=101, 
         student_uuid=92, 
         question_text="Why is this a counting sort?")
-    controller.assign_image_to_question(110, "110_IMG_0005.jpeg")
+    controller.assign_image_to_question(110, "static/question_assets/110_IMG_0005.jpeg")
     controller.add_question_to_queue(
         queue_id=101, 
         student_uuid=95, 
